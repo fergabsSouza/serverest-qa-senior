@@ -61,5 +61,72 @@ O objetivo deste repositório é entregar uma automação completa para a aplica
 ---
 
 ## 🔧 Setup do Projeto
-A instalação e execução do projeto serão documentadas assim que os testes forem implementados.
 
+```bash
+# 1) Clonar
+git clone https://github.com/<seu-usuario>/serverest-qa-senior.git
+cd serverest-qa-senior
+
+# 2) Instalar dependências
+npm install
+
+# 3) Verificar binário do Cypress
+npx cypress verify
+
+# 4) Checar tipagem TypeScript
+npm run typecheck
+```
+
+## 🧪 Testes e Scripts
+
+Scripts principais (via `npm run ...`):
+
+- **Abrir GUI do Cypress**: `cy:open`  
+- **Rodar toda a suíte (headless)**: `cy:run`  
+- **Somente API**: `cy:api`  
+- **Somente UI**: `cy:ui`  
+- **Sanity/Healthcheck de UI**: `check:ui`  
+- **Typecheck TS**: `typecheck` (usado também por `lint`/`pretest`)
+
+Exemplos:
+```bash
+npm run cy:open
+npm run cy:run
+npm run cy:api
+npm run cy:ui
+npm run check:ui   # roda apenas cypress/e2e/common/healthcheck.cy.ts
+```
+
+### Healthcheck incluído
+Spec: `cypress/e2e/common/healthcheck.cy.ts`  
+- Verifica resposta **200/304** do `/login`
+- Valida renderização de elementos-chave (título, inputs, botão `data-testid="entrar"`), com timeouts e retries seguros
+
+---
+
+## ⚙️ Detalhes de Configuração
+
+- **TypeScript (`tsconfig.json`)**
+  - `types: ["cypress", "node"]`
+  - `include`: `cypress/**/*.ts`, `src/**/*.ts`, `cypress.config.ts`
+  - Sem `typeRoots` (o TS resolve os tipos do Cypress via `node_modules/cypress/types`)
+- **Cypress (`cypress.config.ts`)**
+  - Import de módulos nativos com `import * as fs from "fs"; import * as path from "path";`
+  - Carregamento opcional de `cypress/config/env.local.json`
+  - `baseUrl` padrão: `https://front.serverest.dev`
+  - `env.apiUrl` padrão: `https://serverest.dev`
+
+---
+
+## 🤖 CI (GitHub Actions)
+Pipeline simples em `.github/workflows/ci.yml` executando Cypress em `ubuntu-latest`.  
+(opcional) Você pode adicionar um job de **sanity** chamando `npm run check:ui` antes da suíte completa.
+
+---
+
+## 🩺 Troubleshooting
+- **Types do Cypress/Node não encontrados**:  
+  `npm install`, selecione **TypeScript: Use Workspace Version** no VS Code e rode `npm run typecheck`.
+- **Timeout para carregar a UI**:  
+  Use `npm run check:ui` (spec com timeouts/retries específicos) ou ajuste `pageLoadTimeout`/`defaultCommandTimeout` conforme necessário.
+---
