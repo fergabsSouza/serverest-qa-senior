@@ -12,13 +12,17 @@
     "cy:run": "cypress run",
     "cy:api": "cypress run --spec 'cypress/e2e/api/**/*.cy.ts'",
     "cy:ui": "cypress run --spec 'cypress/e2e/ui/**/*.cy.ts'",
-    "test": "cypress run",
-    "lint": "tsc --noEmit",
-    "pretest": "tsc --noEmit"
+    "check:ui": "cypress run --spec cypress/e2e/common/healthcheck.cy.ts",
+
+
+    "typecheck": "tsc -p tsconfig.json",
+    "lint": "npm run typecheck",
+    "pretest": "npm run typecheck",
+    "test": "cypress run"
   },
   "devDependencies": {
-    "@types/node": "^20.11.0",
+    "@types/node": "^20.12.12",
     "cypress": "^13.9.0",
-    "typescript": "^5.4.0"
+    "typescript": "^5.4.5"
   }
 }

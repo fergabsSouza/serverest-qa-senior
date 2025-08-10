@@ -1,6 +1,6 @@
 import { defineConfig } from "cypress";
-import fs from "node:fs";
-import path from "node:path";
+import * as fs from "fs";
+import * as path from "path";
 
 /**
  * Carrega variáveis de ambiente locais de cypress/config/env.local.json (se existir).
