@@ -61,5 +61,44 @@ O objetivo deste repositório é entregar uma automação completa para a aplica
 ---
 
 ## 🔧 Setup do Projeto
-A instalação e execução do projeto serão documentadas assim que os testes forem implementados.
+´´´
+# 1) Clonar
+git clone https://github.com/<seu-usuario>/serverest-qa-senior.git
+cd serverest-qa-senior
 
+# 2) Instalar dependências
+npm install
+
+# 3) Verificar binário do Cypress
+npx cypress verify
+
+# 4) Checar tipagem TypeScript
+npm run typecheck
+´´´
+---
+
+## 🧪 Testes e Scripts
+Scripts principais (via npm run ...):
+
+Abrir GUI do Cypress: cy:open
+
+Rodar toda a suíte (headless): cy:run
+
+Somente API: cy:api
+
+Somente UI: cy:ui
+
+Sanity/Healthcheck de UI: check:ui
+
+Typecheck TS: typecheck (usado também por lint/pretest)
+
+Exemplos:
+
+bash
+Copiar
+Editar
+npm run cy:open
+npm run cy:run
+npm run cy:api
+npm run cy:ui
+npm run check:ui   # roda apenas cypress/e2e/common/healthcheck.cy.ts
