@@ -1,0 +1,24 @@
+{
+  "name": "serverest-qa-senior",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Automação de testes (API + UI) para ServeRest com Cypress + TypeScript",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "cy:api": "cypress run --spec 'cypress/e2e/api/**/*.cy.ts'",
+    "cy:ui": "cypress run --spec 'cypress/e2e/ui/**/*.cy.ts'",
+    "test": "cypress run",
+    "lint": "tsc --noEmit",
+    "pretest": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "cypress": "^13.9.0",
+    "typescript": "^5.4.0"
+  }
+}

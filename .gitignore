@@ -1,0 +1,21 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn.lock
+pnpm-lock.yaml
+
+# Cypress cache/artefatos
+.cypress-cache/
+cypress/screenshots/
+cypress/videos/
+
+# VSCode/IDE
+.vscode/
+.idea/
+
+# SO
+.DS_Store
+Thumbs.db
+
+# Env locais (não versionar variaveis)
+cypress/config/env.local.json
