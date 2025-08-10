@@ -7,7 +7,20 @@ on:
   pull_request:
 
 jobs:
+
+  sanity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 18 }
+      - run: npm ci
+      - run: npx cypress verify
+      - name: UI healthcheck
+        run: npm run check:ui
+
   cypress-run:
+    needs: sanity
     runs-on: ubuntu-latest
 
     steps:
@@ -22,5 +35,5 @@ jobs:
       - name: Instalar dependências
         run: npm install
 
-      - name: Rodar Cypress (modo headless)
-        run: npx cypress run
+      - name: Rodar Cypress 
+        run: npm run cy:run

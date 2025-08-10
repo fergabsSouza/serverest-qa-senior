@@ -1,6 +1,5 @@
 // cypress/e2e/common/healthcheck.cy.ts
 describe('healthcheck (login)', () => {
-  // aumenta timeouts só pra este spec
   before(() => {
     Cypress.config('pageLoadTimeout', 60000);
     Cypress.config('defaultCommandTimeout', 10000);
@@ -19,10 +18,10 @@ describe('healthcheck (login)', () => {
     // container principal
     cy.get('.login-page.container', { timeout: 20000 }).should('be.visible');
 
-    // título "Login"
+    // título Login
     cy.contains('h1.font-robot', 'Login', { timeout: 20000 }).should('be.visible');
 
-    // campos de email/senha (placeholders conforme a UI)
+    // campos de email/senha 
     cy.get('input[placeholder="Digite seu email"]').should('be.visible');
     cy.get('input[placeholder="Digite sua senha"]').should('be.visible');
 
