@@ -76,6 +76,7 @@ npx cypress verify
 # 4) Checar tipagem TypeScript
 npm run typecheck
 ```
+---
 
 ## 🧪 Testes e Scripts
 
@@ -97,6 +98,11 @@ npm run cy:ui
 npm run check:ui   # roda apenas cypress/e2e/common/healthcheck.cy.ts
 ```
 
+### Qualidade (recomendado antes de commitar/abrir PR)
+```bash
+npm run lint:all   # typecheck + eslint (unused-imports) + ts-prune
+```
+
 ### Healthcheck incluído
 Spec: `cypress/e2e/common/healthcheck.cy.ts`  
 - Verifica resposta **200/304** do `/login`
@@ -104,17 +110,27 @@ Spec: `cypress/e2e/common/healthcheck.cy.ts`
 
 ---
 
+## 🧪 Padrões de Teste
+
+- Usar **`.then(...)`** (encadeado) para manter fluxo claro.
+- Validar **status** e **shape**; mensagens de erro via `expectErrorContains`.
+- Após **DELETE**, **reconsultar** o recurso para garantir remoção efetiva.
+
+---
 ## ⚙️ Detalhes de Configuração
 
+
 - **TypeScript (`tsconfig.json`)**
-  - `types: ["cypress", "node"]`
-  - `include`: `cypress/**/*.ts`, `src/**/*.ts`, `cypress.config.ts`
-  - Sem `typeRoots` (o TS resolve os tipos do Cypress via `node_modules/cypress/types`)
+  - Resolução de paths (`@helpers/*`, `@services/*`, `@types/*`, `@constants/*`).
+  - Flags de limpeza: `noUnusedLocals`, `noUnusedParameters`, etc.
+- **ESLint 9 (flat)** – `eslint.config.cjs`
+  - Plugin `eslint-plugin-unused-imports` para imports/variáveis não usadas.
+- **ts-prune**
+  - Script `scripts/check-exports.cjs`; executado por `npm run check:exports` e em `lint:all`.
 - **Cypress (`cypress.config.ts`)**
-  - Import de módulos nativos com `import * as fs from "fs"; import * as path from "path";`
-  - Carregamento opcional de `cypress/config/env.local.json`
-  - `baseUrl` padrão: `https://front.serverest.dev`
-  - `env.apiUrl` padrão: `https://serverest.dev`
+  - `baseUrl`: `https://front.serverest.dev`
+  - `env.apiUrl`: `https://serverest.dev`
+  - Suporte a `cypress/config/env.local.json` (git-ignored) para sobrescrever valores locais.
 
 ---
 

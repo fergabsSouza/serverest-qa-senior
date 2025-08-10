@@ -4,9 +4,7 @@
   "private": true,
   "description": "Automação de testes (API + UI) para ServeRest com Cypress + TypeScript",
   "license": "MIT",
-  "engines": {
-    "node": ">=18"
-  },
+  "engines": { "node": ">=18" },
   "scripts": {
     "cy:open": "cypress open",
     "cy:run": "cypress run",
@@ -14,15 +12,27 @@
     "cy:ui": "cypress run --spec 'cypress/e2e/ui/**/*.cy.ts'",
     "check:ui": "cypress run --spec cypress/e2e/common/healthcheck.cy.ts",
 
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint . --ext .ts --max-warnings=0",
+    "lint:fix": "eslint . --ext .ts --fix",
 
-    "typecheck": "tsc -p tsconfig.json",
-    "lint": "npm run typecheck",
-    "pretest": "npm run typecheck",
+    "check:exports": "node scripts/check-exports.cjs",
+    "lint:all": "npm run typecheck && npm run lint && npm run check:exports",
+
+    "pretest": "npm run lint:all",
     "test": "cypress run"
   },
   "devDependencies": {
+    "@faker-js/faker": "^9.9.0",
     "@types/node": "^20.12.12",
+    "@typescript-eslint/eslint-plugin": "^8.39.0",
+    "@typescript-eslint/parser": "^8.39.0",
     "cypress": "^13.9.0",
-    "typescript": "^5.4.5"
+    "eslint": "^9.33.0",
+    "eslint-plugin-cypress": "^5.1.0",
+    "eslint-plugin-unused-imports": "^4.1.4",
+    "ts-prune": "^0.10.3",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^8.39.0"
   }
 }

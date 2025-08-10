@@ -28,15 +28,13 @@ export default defineConfig({
     specPattern: "cypress/e2e/**/*.cy.ts",
     supportFile: "cypress/support/e2e.ts",
 
-    // merge de env padrão + env local
     env: {
       apiUrl: "https://serverest.dev",
       ...loadLocalEnv()
     },
 
     setupNodeEvents(on, config) {
-      // Se quiser logar as variáveis efetivas em debug:
-      // console.log("Cypress env:", config.env);
+      void on
       return config;
     }
   },
