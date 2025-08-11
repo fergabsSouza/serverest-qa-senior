@@ -1,10 +1,10 @@
 // cypress/e2e/api/users.cy.ts
-import * as Users from '../../../src/services/userService';
-import { makeRandomUser } from '../../../src/helpers/generateData';
-import { randomAlphaNumId } from '../../../src/helpers/id';
-import { expectErrorContains } from '../../../src/helpers/assertions';
+import * as Users from "../../../src/services/userService";
+import { makeRandomUser } from "../../../src/helpers/generateData";
+import { randomAlphaNumId } from "../../../src/helpers/id";
+import { expectErrorContains } from "../../../src/helpers/assertions";
 
-describe('API - Usuários (E2E + cenários de falha)', () => {
+describe("API - Usuários (E2E + cenários de falha)", () => {
   let createdIds: string[] = [];
 
   afterEach(() => {
@@ -12,9 +12,9 @@ describe('API - Usuários (E2E + cenários de falha)', () => {
     createdIds = [];
   });
 
-  it('E2E: criar → buscar → editar → excluir (e validar 400 após exclusão)', () => {
+  it("E2E: criar → buscar → editar → excluir (e validar 400 após exclusão)", () => {
     const user = makeRandomUser(false);
-    let id = '';
+    let id = "";
 
     Users.create(user)
       .then((resCreate) => {
@@ -46,11 +46,11 @@ describe('API - Usuários (E2E + cenários de falha)', () => {
       })
       .then((resAfter) => {
         expect(resAfter.status).to.eq(400);
-        expectErrorContains(resAfter.body, ['usuario', 'nao encontrado']);
+        expectErrorContains(resAfter.body, ["usuario", "nao encontrado"]);
       });
   });
 
-  it('negativo: email duplicado (400)', () => {
+  it("negativo: email duplicado (400)", () => {
     const u = makeRandomUser(false);
 
     Users.create(u)
@@ -61,26 +61,25 @@ describe('API - Usuários (E2E + cenários de falha)', () => {
       })
       .then((r2) => {
         expect(r2.status).to.eq(400);
-        expectErrorContains(r2.body, ['email', 'ja', 'usado']);
+        expectErrorContains(r2.body, ["email", "ja", "usado"]);
       });
   });
 
-  it('buscar por id com FORMATO inválido deve retornar 400 com mensagem de validação', () => {
-    const invalid = 'id_inexistente_qa';
+  it("buscar por id com FORMATO inválido deve retornar 400 com mensagem de validação", () => {
+    const invalid = "id_inexistente_qa";
 
     Users.getById(invalid).then((r) => {
       expect(r.status).to.eq(400);
-      expectErrorContains(r.body, ['exatamente 16', 'caracter', 'alfanumer']);
+      expectErrorContains(r.body, ["exatamente 16", "caracter", "alfanumer"]);
     });
   });
 
-  it('buscar por id VÁLIDO porém INEXISTENTE deve retornar 400 (não encontrado)', () => {
+  it("buscar por id VÁLIDO porém INEXISTENTE deve retornar 400 (não encontrado)", () => {
     const fakeId = randomAlphaNumId(16);
 
-    Users.getById(fakeId)
-      .then((r) => {
-        expect(r.status).to.eq(400);
-        expectErrorContains(r.body, ['usuario', 'nao encontrado']);
-      });
+    Users.getById(fakeId).then((r) => {
+      expect(r.status).to.eq(400);
+      expectErrorContains(r.body, ["usuario", "nao encontrado"]);
+    });
   });
 });
