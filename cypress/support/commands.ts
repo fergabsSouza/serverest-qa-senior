@@ -3,22 +3,21 @@ import type { User } from '../../src/types/user';
 import type { Product } from '../../src/types/products';
 
 const API = Cypress.env('apiUrl') || 'https://serverest.dev';
+const authHeader = (token: string) => ({ Authorization: token });
 
-function authHeader(token: string) {
-  return { Authorization: token };
-}
-
+// ============ AUTH ============
 Cypress.Commands.add('apiLogin', (email: string, password: string) => {
-  return cy.request({
-    method: 'POST',
-    url: `${API}/login`,
-    body: { email, password },
-    failOnStatusCode: false,
-  }).then((res) => {
-    return res.body?.authorization as string; // ex.: "Bearer xxx"
-  });
+  return cy
+    .request({
+      method: 'POST',
+      url: `${API}/login`,
+      body: { email, password },
+      failOnStatusCode: false,
+    })
+    .then((res) => res.body?.authorization as string); // "Bearer xxx"
 });
 
+// ============ USERS ============
 Cypress.Commands.add('apiCreateUser', (user: User) => {
   return cy.request({
     method: 'POST',
@@ -53,6 +52,7 @@ Cypress.Commands.add('apiDeleteUser', (_id: string) => {
   });
 });
 
+// ============ PRODUCTS ============
 Cypress.Commands.add('apiCreateProduct', (product: Product, token: string) => {
   return cy.request({
     method: 'POST',
@@ -88,4 +88,61 @@ Cypress.Commands.add('apiDeleteProduct', (_id: string, token: string) => {
     headers: authHeader(token),
     failOnStatusCode: false,
   });
+});
+
+// ============ UI ============
+Cypress.Commands.add('uiLogin', (email: string, password: string) => {
+  const API = Cypress.env('apiUrl') || 'https://serverest.dev';
+  cy.intercept('POST', `${API}/login`).as('apiLogin');
+
+  cy.visit('/login');
+
+  cy.get('body').then(($b) => {
+    const emailSel = '[data-testid="email"], input[type="email"], input[name="email"]';
+    const passSel  = '[data-testid="senha"], [data-testid="password"], input[type="password"], input[name="password"]';
+    const btnSel   = '[data-testid="entrar"], button[type="submit"]';
+
+    if ($b.find(emailSel).length) cy.get(emailSel).first().clear().type(email);
+    else cy.contains('label, span', /email|e-mail/i).closest('form,div').find('input').first().clear().type(email);
+
+    if ($b.find(passSel).length) cy.get(passSel).first().clear().type(password, { log: false });
+    else cy.get('input[type="password"]').first().clear().type(password, { log: false });
+
+    if ($b.find(btnSel).length) cy.get(btnSel).first().click({ force: true });
+    else cy.contains('button, [role="button"]', /entrar|login/i).click({ force: true });
+  });
+
+  // 1) Login aceito pelo backend
+  cy.wait('@apiLogin').its('response.statusCode').should('eq', 200);
+  // 2) Saiu da tela de login
+  cy.location('pathname', { timeout: 20_000 }).should('not.include', '/login');
+});
+
+Cypress.Commands.add('uiAssertLoggedIn', () => {
+  cy.location('pathname', { timeout: 20_000 }).should('not.include', '/login');
+  cy.get('body', { timeout: 10_000 }).then(($b) => {
+    const selectors = [
+      '[data-testid="sair"]',
+      '[data-testid="logout"]',
+      'a[href*="produt"]',
+      'a[href*="carrinh"]',
+    ];
+    const found = selectors.some((s) => $b.find(s).length > 0);
+    if (!found) {
+      cy.contains(/sair|logout|produt|carrinh/i).should('be.visible');
+    }
+  });
+});
+
+Cypress.Commands.add('uiLogout', () => {
+  cy.get('body').then(($b) => {
+    const btnSel = '[data-testid="sair"], [data-testid="logout"]';
+    if ($b.find(btnSel).length) {
+      cy.get(btnSel).first().click({ force: true });
+    } else {
+      cy.contains('button, a, [role="button"]', /sair|logout/i).click({ force: true });
+    }
+  });
+
+  cy.location('pathname', { timeout: 20_000 }).should('include', '/login');
 });
