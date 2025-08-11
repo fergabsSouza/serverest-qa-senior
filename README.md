@@ -4,7 +4,6 @@ Automação de testes para a aplicação [ServeRest](https://serverest.dev), des
 
 Este projeto cobre **testes de API** e **testes de Frontend (UI)** utilizando o **Cypress** com **TypeScript**, seguindo boas práticas de arquitetura, organização e manutenção.
 
----
 
 ## ✅ Pré-requisitos
 
@@ -12,7 +11,6 @@ Este projeto cobre **testes de API** e **testes de Frontend (UI)** utilizando o 
 - **Git**
 - (Opcional) **VS Code** + extensão oficial do Cypress
 
----
 
 ## 📂 Estrutura de Pastas
 
@@ -40,17 +38,17 @@ serverest-qa-senior/
 ├── cypress.config.ts                # Configuração principal do Cypress
 ├── package.json                     # Dependências e scripts do projeto
 ├── README.md                        # Documentação do projeto
-└── tsconfig.json                    # Configuração do TypeScript
+├── tsconfig.json                    # Configuração do TypeScript
+├──eslint.config.cjs                 # ESLint v9 (flat) + unused-imports
+└──scripts/check-exports.cjs         # ts-prune wrapper (CI-friendly)
 
 ```
----
 
 ## 🚀 Tecnologias Utilizadas
 - [Cypress](https://www.cypress.io/) para automação de testes
 - [TypeScript](https://www.typescriptlang.org/) para tipagem estática
 - [GitHub Actions](https://github.com/features/actions) para integração contínua (CI/CD)
 
----
 
 ## 📌 Objetivo
 O objetivo deste repositório é entregar uma automação completa para a aplicação **ServeRest**, cobrindo:
@@ -58,7 +56,6 @@ O objetivo deste repositório é entregar uma automação completa para a aplica
 2. **Testes de UI** — Fluxo de login e compra de produto.
 3. **Boas práticas de QA Sênior** — Arquitetura limpa, reuso de código, e execução em CI.
 
----
 
 ## 🔧 Setup do Projeto
 
@@ -76,7 +73,6 @@ npx cypress verify
 # 4) Checar tipagem TypeScript
 npm run typecheck
 ```
----
 
 ## 🧪 Testes e Scripts
 
@@ -108,7 +104,6 @@ Spec: `cypress/e2e/common/healthcheck.cy.ts`
 - Verifica resposta **200/304** do `/login`
 - Valida renderização de elementos-chave (título, inputs, botão `data-testid="entrar"`), com timeouts e retries seguros
 
----
 
 ## 🧪 Padrões de Teste
 
@@ -116,9 +111,7 @@ Spec: `cypress/e2e/common/healthcheck.cy.ts`
 - Validar **status** e **shape**; mensagens de erro via `expectErrorContains`.
 - Após **DELETE**, **reconsultar** o recurso para garantir remoção efetiva.
 
----
 ## ⚙️ Detalhes de Configuração
-
 
 - **TypeScript (`tsconfig.json`)**
   - Resolução de paths (`@helpers/*`, `@services/*`, `@types/*`, `@constants/*`).
@@ -132,17 +125,13 @@ Spec: `cypress/e2e/common/healthcheck.cy.ts`
   - `env.apiUrl`: `https://serverest.dev`
   - Suporte a `cypress/config/env.local.json` (git-ignored) para sobrescrever valores locais.
 
----
 
 ## 🤖 CI (GitHub Actions)
 Pipeline simples em `.github/workflows/ci.yml` executando Cypress em `ubuntu-latest`.  
 (opcional) Você pode adicionar um job de **sanity** chamando `npm run check:ui` antes da suíte completa.
-
----
 
 ## 🩺 Troubleshooting
 - **Types do Cypress/Node não encontrados**:  
   `npm install`, selecione **TypeScript: Use Workspace Version** no VS Code e rode `npm run typecheck`.
 - **Timeout para carregar a UI**:  
   Use `npm run check:ui` (spec com timeouts/retries específicos) ou ajuste `pageLoadTimeout`/`defaultCommandTimeout` conforme necessário.
----
