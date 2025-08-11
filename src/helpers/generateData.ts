@@ -1,6 +1,6 @@
-// src/helpers/generateData.ts
 import type { User, AdminFlag } from '../types/user';
 import type { Product } from '../types/products';
+import { faker } from '@faker-js/faker';
 
 export function makeRandomUser(admin = false): User {
   const r = Math.floor(Math.random() * 1e9);
@@ -13,13 +13,11 @@ export function makeRandomUser(admin = false): User {
   };
 }
 
-export function makeRandomProduct(overrides: Partial<Product> = {}): Product {
-  const r = Math.floor(Math.random() * 1e9);
+export function makeRandomProduct(): Product {
   return {
-    nome: `Produto QA ${r}`,
-    preco: 199,
-    descricao: 'Produto de teste QA',
-    quantidade: 10,
-    ...overrides,
+    nome: `QA ${faker.commerce.productName()} ${faker.string.alphanumeric(6)}`,
+    preco: faker.number.int({ min: 10, max: 8000 }),
+    descricao: faker.commerce.product(),
+    quantidade: faker.number.int({ min: 1, max: 100 }),
   };
 }
