@@ -8,6 +8,7 @@ pnpm-lock.yaml
 .cypress-cache/
 cypress/screenshots/
 cypress/videos/
+cypress/downloads/
 
 # VSCode/IDE
 .vscode/
