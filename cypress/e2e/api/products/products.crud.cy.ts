@@ -45,7 +45,6 @@ describe('Produtos - Validação & Limites', () => {
 
     Products.getById(invalid).then((r) => {
       expect(r.status).to.eq(400)
-      // helper já enxerga body.id
       expectErrorContains(r.body, ['exatamente 16', 'caracter', 'alfanumer'])
     })
   })

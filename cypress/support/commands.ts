@@ -14,7 +14,7 @@ Cypress.Commands.add('apiLogin', (email: string, password: string) => {
       body: { email, password },
       failOnStatusCode: false,
     })
-    .then((res) => res.body?.authorization as string) // "Bearer xxx"
+    .then((res) => res.body?.authorization as string) 
 })
 
 // ============ USERS ============
@@ -112,9 +112,7 @@ Cypress.Commands.add('uiLogin', (email: string, password: string) => {
     else cy.contains('button, [role="button"]', /entrar|login/i).click({ force: true })
   })
 
-  // 1) Login aceito pelo backend
   cy.wait('@apiLogin').its('response.statusCode').should('eq', 200)
-  // 2) Saiu da tela de login
   cy.location('pathname', { timeout: 20_000 }).should('not.include', '/login')
 })
 
@@ -147,7 +145,6 @@ Cypress.Commands.add('uiLogout', () => {
   cy.location('pathname', { timeout: 20_000 }).should('include', '/login')
 })
 
-// === UI helpers para navegação simples ===
 Cypress.Commands.add('uiGoHome', () => {
   cy.get('body').then(($b) => {
     const link = $b.find('a:contains("Home"), a:contains("Página Inicial"), [href*="/home"]').first()
@@ -158,7 +155,6 @@ Cypress.Commands.add('uiGoHome', () => {
     }
   })
 
-  // título do topo da Home
   cy.contains('h1,h2', /serverest store/i, { timeout: 15000 }).should('be.visible')
 })
 
@@ -172,7 +168,6 @@ Cypress.Commands.add('uiOpenShoppingList', () => {
   cy.contains('h1,h2', /lista de compras/i).should('be.visible')
 })
 
-// limpa a Lista de Compras se houver itens
 Cypress.Commands.add('uiClearShoppingListIfAny', () => {
   cy.uiOpenShoppingList()
   cy.get('body').then(($b) => {

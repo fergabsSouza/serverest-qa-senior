@@ -5,7 +5,6 @@ const unusedImports = require('eslint-plugin-unused-imports')
 const isCI = process.env.CI === 'true'
 
 module.exports = tseslint.config(
-  // Ignorados
   {
     ignores: [
       'node_modules',

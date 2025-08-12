@@ -1,4 +1,3 @@
-// cypress/e2e/api/users.cy.ts
 import * as Users from "@services/userService"
 import { makeRandomUser } from "@helpers/generateData"
 import { randomAlphaNumId } from "@helpers/id"
