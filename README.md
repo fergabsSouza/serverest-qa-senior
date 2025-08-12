@@ -108,7 +108,7 @@ Spec: `cypress/e2e/common/healthcheck.cy.ts`
 ## 🧪 Padrões de Teste
 
 - Usar **`.then(...)`** (encadeado) para manter fluxo claro.
-- Validar **status** e **shape**; mensagens de erro via `expectErrorContains`.
+- Validar **status** e **shape** mensagens de erro via `expectErrorContains`.
 - Após **DELETE**, **reconsultar** o recurso para garantir remoção efetiva.
 
 ## ⚙️ Detalhes de Configuração
@@ -119,7 +119,7 @@ Spec: `cypress/e2e/common/healthcheck.cy.ts`
 - **ESLint 9 (flat)** – `eslint.config.cjs`
   - Plugin `eslint-plugin-unused-imports` para imports/variáveis não usadas.
 - **ts-prune**
-  - Script `scripts/check-exports.cjs`; executado por `npm run check:exports` e em `lint:all`.
+  - Script `scripts/check-exports.cjs` executado por `npm run check:exports` e em `lint:all`.
 - **Cypress (`cypress.config.ts`)**
   - `baseUrl`: `https://front.serverest.dev`
   - `env.apiUrl`: `https://serverest.dev`
