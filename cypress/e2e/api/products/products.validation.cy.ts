@@ -1,4 +1,3 @@
-// cypress/e2e/api/products/products.validation.cy.ts
 import * as Users from '@services/userService'
 import * as Auth from '@services/authService'
 import * as Products from '@services/productService'

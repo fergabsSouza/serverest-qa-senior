@@ -10,7 +10,7 @@ export function extractErrorText(body: unknown): string {
     const raw =
       (typeof b.message === 'string' && b.message) ||
       (typeof b.mensagem === 'string' && b.mensagem) ||
-      (typeof b.id === 'string' && b.id) || // 👈 cobre o caso 400 com { id: "..." }
+      (typeof b.id === 'string' && b.id) ||
       JSON.stringify(body)
     return stripAccents(String(raw))
   }

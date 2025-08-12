@@ -15,21 +15,20 @@ export interface CreateProductRes {
 }
 
 export interface UpdateProductRes200 {
-  message: string // "Registro alterado com sucesso"
+  message: string 
 }
 
 export interface UpdateProductRes201 {
-  message: string // "Cadastro realizado com sucesso"
+  message: string 
   _id: string
 }
 
 export type UpdateProductRes = UpdateProductRes200 | UpdateProductRes201
 
 export interface DeleteProductRes {
-  message: string // "Registro excluído com sucesso | Nenhum registro excluído"
+  message: string 
 }
 
-// Erros padronizados do swagger
 export interface ApiMsg {
   message: string
 }

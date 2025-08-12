@@ -1,7 +1,6 @@
 /// <reference types="cypress" />
 
 declare namespace Cypress {
-  // Tipos do projeto (via tsconfig paths)
   type User = import('@types/user').User
   type Product = import('@types/products').Product
 
@@ -11,7 +10,7 @@ declare namespace Cypress {
 
     // Users
     apiCreateUser(user: User): Chainable<Cypress.Response<{ _id: string; message: string }>>
-    apiGetUserById(_id: string): Chainable<Cypress.Response<User | { message: string }>> // 200 ou 400
+    apiGetUserById(_id: string): Chainable<Cypress.Response<User | { message: string }>> 
     apiUpdateUser(_id: string, user: User): Chainable<Cypress.Response<{ message: string; _id?: string }>>
     apiDeleteUser(_id: string): Chainable<Cypress.Response<{ message: string }>>
 
