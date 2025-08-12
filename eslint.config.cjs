@@ -1,17 +1,19 @@
-// eslint.config.cjs
 const tseslint = require('typescript-eslint');
 const cypress = require('eslint-plugin-cypress');
 const unusedImports = require('eslint-plugin-unused-imports');
 
+const isCI = process.env.CI === 'true';
+
 module.exports = tseslint.config(
+  // Ignorados
   {
     ignores: [
-        'node_modules',
-        'dist',
-        'cypress/videos',
-        'cypress/screenshots',
-        'eslint.config.cjs',
-        'scripts/check-exports.cjs',
+      'node_modules',
+      'dist',
+      'cypress/videos',
+      'cypress/screenshots',
+      'eslint.config.cjs',
+      'scripts/check-exports.cjs'
     ],
   },
 
@@ -23,14 +25,8 @@ module.exports = tseslint.config(
       'unused-imports': unusedImports,
     },
     rules: {
-      // Deixa o TypeScript acusar parâmetros/variáveis não usados,
-      // mas usamos o plugin para pegas extras e autofix de imports:
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-
-      // Marca e permite autofix de imports não usados:
       'unused-imports/no-unused-imports': 'error',
-
-      // Garante que variáveis não usadas também sejam pegas aqui (permite args/vars com _):
       'unused-imports/no-unused-vars': [
         'error',
         { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' },
@@ -41,5 +37,12 @@ module.exports = tseslint.config(
   {
     files: ['cypress/**/*.ts'],
     ...cypress.configs.recommended,
+  },
+
+  {
+    files: ['cypress/e2e/ui/**/*.ts', 'cypress/support/*.ts'],
+    rules: {
+      'cypress/unsafe-to-chain-command': isCI ? 'error' : 'off',
+    },
   }
 );
