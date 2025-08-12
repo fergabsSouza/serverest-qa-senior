@@ -6,7 +6,6 @@ on:
       - main
   pull_request:
 
-# Evita pipelines concorrentes desnecessários
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
@@ -36,7 +35,25 @@ jobs:
         with:
           command: npm run check:ui
           install: false
-          upload-artifact: true  # envia vídeos/screenshots como artefatos
+
+      # Upload explícito dos artefatos (mesmo se falhar / mesmo sem o flag do action)
+      - name: Upload screenshots (healthcheck)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-healthcheck
+          path: cypress/screenshots/**/*
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Upload videos (healthcheck)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: videos-healthcheck
+          path: cypress/videos/**/*
+          if-no-files-found: ignore
+          retention-days: 7
 
   api:
     name: API Tests
@@ -60,7 +77,24 @@ jobs:
         with:
           command: npm run cy:api
           install: false
-          upload-artifact: true
+
+      - name: Upload screenshots (api)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-api
+          path: cypress/screenshots/**/*
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Upload videos (api)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: videos-api
+          path: cypress/videos/**/*
+          if-no-files-found: ignore
+          retention-days: 7
 
   ui:
     name: UI Tests
@@ -84,4 +118,21 @@ jobs:
         with:
           command: npm run cy:ui
           install: false
-          upload-artifact: true
+
+      - name: Upload screenshots (ui)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-ui
+          path: cypress/screenshots/**/*
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Upload videos (ui)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: videos-ui
+          path: cypress/videos/**/*
+          if-no-files-found: ignore
+          retention-days: 7
