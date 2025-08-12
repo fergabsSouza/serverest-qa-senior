@@ -18,7 +18,7 @@
     "paths": {
       "@helpers/*": ["src/helpers/*"],
       "@services/*": ["src/services/*"],
-      "@types/*": ["src/types/*"],
+      "@app-types/*": ["src/types/*"],
       "@constants/*": ["src/constants/*"]
     },
 

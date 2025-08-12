@@ -6,23 +6,14 @@ on:
       - main
   pull_request:
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-
-  sanity:
+  healthcheck:
+    name: UI Healthcheck
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: 18 }
-      - run: npm ci
-      - run: npx cypress verify
-      - name: UI healthcheck
-        run: npm run check:ui
-
-  cypress-run:
-    needs: sanity
-    runs-on: ubuntu-latest
-
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
@@ -31,9 +22,117 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
+          cache: 'npm'
 
       - name: Instalar dependências
-        run: npm install
+        run: npm ci
 
-      - name: Rodar Cypress 
-        run: npm run cy:run
+      - name: Verificar Cypress
+        run: npx cypress verify
+
+      - name: Rodar healthcheck (UI)
+        uses: cypress-io/github-action@v6
+        with:
+          command: npm run check:ui
+          install: false
+
+      # Upload explícito dos artefatos (mesmo se falhar / mesmo sem o flag do action)
+      - name: Upload screenshots (healthcheck)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-healthcheck
+          path: cypress/screenshots/**/*
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Upload videos (healthcheck)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: videos-healthcheck
+          path: cypress/videos/**/*
+          if-no-files-found: ignore
+          retention-days: 7
+
+  api:
+    name: API Tests
+    needs: healthcheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Rodar testes de API
+        uses: cypress-io/github-action@v6
+        with:
+          command: npm run cy:api
+          install: false
+
+      - name: Upload screenshots (api)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-api
+          path: cypress/screenshots/**/*
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Upload videos (api)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: videos-api
+          path: cypress/videos/**/*
+          if-no-files-found: ignore
+          retention-days: 7
+
+  ui:
+    name: UI Tests
+    needs: api
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Rodar testes de UI
+        uses: cypress-io/github-action@v6
+        with:
+          command: npm run cy:ui
+          install: false
+
+      - name: Upload screenshots (ui)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-ui
+          path: cypress/screenshots/**/*
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Upload videos (ui)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: videos-ui
+          path: cypress/videos/**/*
+          if-no-files-found: ignore
+          retention-days: 7

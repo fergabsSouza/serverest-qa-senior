@@ -1,6 +1,6 @@
-import { defineConfig } from "cypress";
-import * as fs from "fs";
-import * as path from "path";
+import { defineConfig } from "cypress"
+import * as fs from "fs"
+import * as path from "path"
 
 /**
  * Carrega variáveis de ambiente locais de cypress/config/env.local.json (se existir).
@@ -9,15 +9,15 @@ import * as path from "path";
  */
 function loadLocalEnv() {
   try {
-    const p = path.resolve("cypress/config/env.local.json");
+    const p = path.resolve("cypress/config/env.local.json")
     if (fs.existsSync(p)) {
-      const raw = fs.readFileSync(p, "utf-8");
-      return JSON.parse(raw);
+      const raw = fs.readFileSync(p, "utf-8")
+      return JSON.parse(raw)
     }
   } catch {
     // silenciosamente ignora erros de leitura/parse
   }
-  return {};
+  return {}
 }
 
 export default defineConfig({
@@ -25,7 +25,7 @@ export default defineConfig({
     // baseUrl padrão (pode ser sobrescrito por env.local.json)
     baseUrl: "https://front.serverest.dev",
 
-    specPattern: "cypress/e2e/**/*.cy.ts",
+    specPattern: "cypress/e2e/**/**/*.cy.ts",
     supportFile: "cypress/support/e2e.ts",
 
     env: {
@@ -35,11 +35,11 @@ export default defineConfig({
 
     setupNodeEvents(on, config) {
       void on
-      return config;
+      return config
     }
   },
   video: true,
   screenshotsFolder: "cypress/screenshots",
   videosFolder: "cypress/videos",
   reporter: "spec"
-});
+})

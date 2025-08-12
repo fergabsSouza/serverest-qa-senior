@@ -1,8 +1,8 @@
-const tseslint = require('typescript-eslint');
-const cypress = require('eslint-plugin-cypress');
-const unusedImports = require('eslint-plugin-unused-imports');
+const tseslint = require('typescript-eslint')
+const cypress = require('eslint-plugin-cypress')
+const unusedImports = require('eslint-plugin-unused-imports')
 
-const isCI = process.env.CI === 'true';
+const isCI = process.env.CI === 'true'
 
 module.exports = tseslint.config(
   // Ignorados
@@ -45,4 +45,4 @@ module.exports = tseslint.config(
       'cypress/unsafe-to-chain-command': isCI ? 'error' : 'off',
     },
   }
-);
+)
