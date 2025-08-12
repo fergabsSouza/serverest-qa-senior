@@ -146,3 +146,41 @@ Cypress.Commands.add('uiLogout', () => {
 
   cy.location('pathname', { timeout: 20_000 }).should('include', '/login');
 });
+
+// === UI helpers para navegação simples ===
+Cypress.Commands.add('uiGoHome', () => {
+  cy.get('body').then(($b) => {
+    const link = $b.find('a:contains("Home"), a:contains("Página Inicial"), [href*="/home"]').first();
+    if (link.length) {
+      cy.wrap(link).click({ force: true });
+    } else {
+      cy.visit('/home');
+    }
+  });
+
+  // título do topo da Home
+  cy.contains('h1,h2', /serverest store/i, { timeout: 15000 }).should('be.visible');
+});
+
+Cypress.Commands.add('uiOpenShoppingList', () => {
+  cy.get('body').then(($b) => {
+    const link = $b.find('a:contains("Lista de Compras"), [href*="minhaLista"]').first();
+    if (link.length) cy.wrap(link).click({ force: true });
+  });
+
+  cy.location('pathname', { timeout: 15000 }).should('include', '/minhaLista');
+  cy.contains('h1,h2', /lista de compras/i).should('be.visible');
+});
+
+// limpa a Lista de Compras se houver itens
+Cypress.Commands.add('uiClearShoppingListIfAny', () => {
+  cy.uiOpenShoppingList();
+  cy.get('body').then(($b) => {
+    const hasCard = $b.find('button:contains("+"), button:contains("-")').length > 0;
+    if (hasCard) {
+      const btn = $b.find('button:contains("Limpar Lista")').first();
+      if (btn.length) cy.wrap(btn).click({ force: true });
+    }
+  });
+});
+

@@ -25,5 +25,8 @@ declare namespace Cypress {
     uiLogin(email: string, password: string): Chainable<void>;
     uiLogout(): Chainable<void>;
     uiAssertLoggedIn(): Chainable<void>;
+    uiGoHome(): Chainable<void>;
+    uiOpenShoppingList(): Chainable<void>;
+    uiClearShoppingListIfAny(): Chainable<void>;
   }
 }
